@@ -132,7 +132,33 @@ abstract class Sprig_Field {
 
 	public function label($name, array $attr = NULL)
 	{
-		return Form::label($name, UTF8::ucwords($this->label), $attr);
+		if (is_array($this->label))
+		{
+			if( isset($this->label[2]))
+			{
+				$attr = $this->label[2];
+			}
+			if( isset($this->label[1]) AND is_bool($this->label[1]))
+			{
+				$autoformat = $this->label[1];
+			}
+			else
+			{
+				$autoformat = TRUE;
+			}
+			if ($autoformat)
+			{
+				return Form::label($name, html::chars(UTF8::ucwords($this->label[0])), $attr);
+			}
+			else
+			{
+				return Form::label($name, $this->label[0], $attr);
+			}
+		}
+		else
+		{
+			return Form::label($name, UTF8::ucwords($this->label), $attr);
+		}
 	}
 
 } // End Sprig_Field
