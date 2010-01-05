@@ -21,17 +21,8 @@ abstract class Sprig {
 	 */
 	public static function factory($name, array $values = NULL)
 	{
-		static $models;
-
-		if ( ! isset($models[$name]))
-		{
-			$class = 'Model_'.$name;
-
-			$models[$name] = new $class;
-		}
-
-		// Create a new instance of the model by clone
-		$model = clone $models[$name];
+		$model = 'Model_'.$name;
+		$model = new $model;
 
 		if ($values)
 		{
@@ -845,14 +836,16 @@ abstract class Sprig {
 	 * @param   array   input attributes
 	 * @return  string
 	 */
-	public function input($field, array $attr = NULL)
+	public function input($name, array $attr = NULL)
 	{
+		$field = $this->_fields[$name];
+
 		if ($attr === NULL)
 		{
 			$attr = $field->attributes;
 		}
 
-		return $this->_fields[$field]->input($field, $this->$field, $attr);
+		return $field->input($name, $this->$name, $attr);
 	}
 
 	/**
